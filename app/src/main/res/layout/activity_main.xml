@@ -12,8 +12,8 @@
         android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:text="Asynchrone"
-        tools:layout_editor_absoluteX="135dp"
-        tools:layout_editor_absoluteY="41dp" />
+        tools:layout_editor_absoluteX="130dp"
+        tools:layout_editor_absoluteY="39dp" />
 
     <Button
         android:id="@+id/button3"

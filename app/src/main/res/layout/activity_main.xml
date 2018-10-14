@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:text="Asynchrone"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="41dp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:text="Différée"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="119dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:text="GraphQL"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="200dp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:text="Sérialisation"
+        tools:layout_editor_absoluteX="135"
+        tools:layout_editor_absoluteY="280dp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:text="Compressée"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="358dp" />
+</android.support.constraint.ConstraintLayout>

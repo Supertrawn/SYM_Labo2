@@ -1,4 +1,14 @@
 package heig_vd.sym_labo2;
 
-public class CompressActivity {
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+public class CompressActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_compress);
+
+    }
 }

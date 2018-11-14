@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">SYM_Labo2</string>
+    <string name="sendLabelValue">Requête a envoyer</string>
+    <string name="responseLabelValue">Requête reçue</string>
+    <string name="sendRequestButton">Send Request</string>
 </resources>

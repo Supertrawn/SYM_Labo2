@@ -6,14 +6,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import heig_vd.sym_labo2.activity.AsyncActivity;
+import heig_vd.sym_labo2.activity.CompressActivity;
+
 public class MainActivity extends AppCompatActivity {
 
-    Button btnasync;
-    Button btndiff;
-    Button btngraph;
-    Button btnser;
-    Button btncompress;
-
+    Button btnAsync;
+    Button btnDiff;
+    Button btnGraphQL;
+    Button btnSerial;
+    Button btnCompressed;
 
 
     @Override
@@ -21,48 +23,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnasync = (Button) findViewById(R.id.btnAsync);
-        btnasync.setOnClickListener(new View.OnClickListener() {
+        btnAsync = (Button) findViewById(R.id.btnAsync);
+        btnAsync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(btnasync.getContext(), AsyncActivity.class);
-                btnasync.getContext().startActivity(intent);
+                Intent intent = new Intent(btnAsync.getContext(), AsyncActivity.class);
+                btnAsync.getContext().startActivity(intent);
             }
         });
 
-        btndiff = (Button) findViewById(R.id.btnDiff);
-        btndiff.setOnClickListener(new View.OnClickListener() {
+        btnDiff = (Button) findViewById(R.id.btnDiff);
+        btnDiff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(btndiff.getContext(), DifActivity.class);
-                btndiff.getContext().startActivity(intent);
+                Intent intent = new Intent(btnDiff.getContext(), DiffActivity.class);
+                btnDiff.getContext().startActivity(intent);
             }
         });
 
-        btngraph = (Button) findViewById(R.id.btnGraph);
-        btngraph.setOnClickListener(new View.OnClickListener() {
+        btnGraphQL = (Button) findViewById(R.id.btnGraph);
+        btnGraphQL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(btngraph.getContext(), GraphActivity.class);
-                btngraph.getContext().startActivity(intent);
+                Intent intent = new Intent(btnGraphQL.getContext(), GraphActivity.class);
+                btnGraphQL.getContext().startActivity(intent);
             }
         });
 
-        btnser = (Button) findViewById(R.id.btnSer);
-        btnser.setOnClickListener(new View.OnClickListener() {
+        btnSerial = (Button) findViewById(R.id.btnSer);
+        btnSerial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(btnser.getContext(), SerialActivity.class);
-                btnser.getContext().startActivity(intent);
+                Intent intent = new Intent(btnSerial.getContext(), SerialActivity.class);
+                btnSerial.getContext().startActivity(intent);
             }
         });
 
-        btncompress = (Button) findViewById(R.id.btnCompress);
-        btncompress.setOnClickListener(new View.OnClickListener() {
+        btnCompressed = (Button) findViewById(R.id.btnCompress);
+        btnCompressed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(btncompress.getContext(), CompressActivity.class);
-                btncompress.getContext().startActivity(intent);
+                Intent intent = new Intent(btnCompressed.getContext(), CompressActivity.class);
+                btnCompressed.getContext().startActivity(intent);
             }
         });
     }

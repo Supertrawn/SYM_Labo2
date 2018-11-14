@@ -42,6 +42,24 @@ public class AsyncSendRequest {
         }
     }
 
+    public void sendJsonRequest(String request, String url){
+        // Check for internet connexion status
+        if(!isConnectedToNetwork()){
+            Toast.makeText(context, "No Internet Connection, please check network", Toast.LENGTH_SHORT).show();
+        }else{
+            new requestOperation().execute(request,url);
+        }
+    }
+
+    public void sendGraphQLRequest(String request, String url){
+        // Check for internet connexion status
+        if(!isConnectedToNetwork()){
+            Toast.makeText(context, "No Internet Connection, please check network", Toast.LENGTH_SHORT).show();
+        }else{
+            new requestOperation().execute(request,url);
+        }
+    }
+
     public void setCommunicationEventListener(CommunicationEventListener commEventListener){
         this.listener = commEventListener;
     }
@@ -107,8 +125,6 @@ public class AsyncSendRequest {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("TAG:", s);
-
             // call handleServerResponse
             listener.handleServerResponse(s);
         }
@@ -146,8 +162,8 @@ public class AsyncSendRequest {
 
         private void requestWriter(OutputStream outputStream, String req) {
             BufferedOutputStream outputStreamWriter;
-
             outputStreamWriter = new BufferedOutputStream(outputStream);
+
             try {
                 byte[] reqToByte = req.getBytes();
                 outputStreamWriter.write(reqToByte, 0, reqToByte.length);
@@ -159,9 +175,9 @@ public class AsyncSendRequest {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
+        /* in case of use for network avaliablility */
         public boolean isNetworkAvaliable(){
             try{
                 int timeOut = 1500;

@@ -14,6 +14,7 @@ import heig_vd.sym_labo2.R;
 import heig_vd.sym_labo2.communication.AsyncSendRequest;
 import heig_vd.sym_labo2.communication.CommunicationEventListener;
 import heig_vd.sym_labo2.communication.CompressedAsyncSendRequest;
+import heig_vd.sym_labo2.utils.Utils;
 
 public class CompressActivity extends AppCompatActivity implements CommunicationEventListener {
 
@@ -36,25 +37,20 @@ public class CompressActivity extends AppCompatActivity implements Communication
         asyncSendRequest = new CompressedAsyncSendRequest(this);
         asyncSendRequest.setCommunicationEventListener(this);
 
+        //Keyboard management
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(requestTextView, InputMethodManager.SHOW_IMPLICIT);
 
-        sendRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // "{\"x\": \"val1\",\"y\":\"val2\"}";
-                String str = requestTextView.getText().toString();
-                if(str != null){
-                    try {
-                        asyncSendRequest.sendRequest(str, "http://sym.iict.ch/rest/txt");
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    Toast.makeText(CompressActivity.this, "Please Fill the request Body", Toast.LENGTH_SHORT).show();
+        sendRequest.setOnClickListener(view -> {
+            String str = requestTextView.getText().toString();
+            if(str != null){
+                try {
+                    asyncSendRequest.sendRequest(str, Utils.TXT_URL);
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-
+            }else{
+                Toast.makeText(CompressActivity.this, "Please Fill the request Body", Toast.LENGTH_SHORT).show();
             }
         });
     }

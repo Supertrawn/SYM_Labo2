@@ -3,4 +3,6 @@
     <string name="sendLabelValue">Requête a envoyer</string>
     <string name="responseLabelValue">Requête reçue</string>
     <string name="sendRequestButton">Send Request</string>
+    <string name="authorsChoice">1. Choix de l\'auteur :</string>
+    <string name="authorsPosts">2. Postes de l\'auteur :</string>
 </resources>

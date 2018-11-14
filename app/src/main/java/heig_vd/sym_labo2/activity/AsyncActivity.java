@@ -13,6 +13,7 @@ import android.widget.Toast;
 import heig_vd.sym_labo2.R;
 import heig_vd.sym_labo2.communication.AsyncSendRequest;
 import heig_vd.sym_labo2.communication.CommunicationEventListener;
+import heig_vd.sym_labo2.utils.Utils;
 
 public class AsyncActivity extends AppCompatActivity implements CommunicationEventListener {
 
@@ -35,7 +36,7 @@ public class AsyncActivity extends AppCompatActivity implements CommunicationEve
         asyncSendRequest = new AsyncSendRequest(this);
         asyncSendRequest.setCommunicationEventListener(this);
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(requestTextView, InputMethodManager.SHOW_IMPLICIT);
 
         sendRequest.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +46,9 @@ public class AsyncActivity extends AppCompatActivity implements CommunicationEve
                 String str = requestTextView.getText().toString();
                 if(str != null){
                     try {
-                        asyncSendRequest.sendRequest(str, "http://sym.iict.ch/rest/txt");
+                        //TODO
+
+                        asyncSendRequest.sendRequest(str, Utils.TXT_URL);
                     }catch (Exception e) {
                         e.printStackTrace();
                     }

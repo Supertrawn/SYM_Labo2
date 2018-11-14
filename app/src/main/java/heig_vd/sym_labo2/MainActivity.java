@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import heig_vd.sym_labo2.activity.AsyncActivity;
 import heig_vd.sym_labo2.activity.CompressActivity;
+import heig_vd.sym_labo2.activity.GraphqlActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         btnGraphQL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(btnGraphQL.getContext(), GraphActivity.class);
+                Intent intent = new Intent(btnGraphQL.getContext(), GraphqlActivity.class);
                 btnGraphQL.getContext().startActivity(intent);
             }
         });

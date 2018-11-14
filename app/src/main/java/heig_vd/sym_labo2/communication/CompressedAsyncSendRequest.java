@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,15 +20,17 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
-public class AsyncSendRequest {
+public class CompressedAsyncSendRequest {
 
     URLConnection urlConnection;
     private Context context;
     private CommunicationEventListener listener;
 
     /** Constructeur */
-    public AsyncSendRequest(Context context){
+    public CompressedAsyncSendRequest(Context context){
         this.context = context;
     }
 
@@ -78,10 +79,13 @@ public class AsyncSendRequest {
                     urlConnection.setDoOutput(true);
                     urlConnection.setDoInput(true);
                     urlConnection.setRequestMethod("POST");
+                    urlConnection.setRequestProperty("Accept-Encoding","deflate");
+                    urlConnection.setRequestProperty("X-Network", "CSD");
+                    urlConnection.setRequestProperty("X-Content-Encoding", "deflate");
                     urlConnection.setRequestProperty("Content-Type", "text/plain");
 
                     //write request in body
-                    requestWriter(urlConnection.getOutputStream(), request);
+                    requestWriterZip(urlConnection.getOutputStream(), request);
                     urlConnection.connect();
 
                     int codeErreur = urlConnection.getResponseCode();
@@ -91,7 +95,7 @@ public class AsyncSendRequest {
                         response = "Erreur " + codeErreur;
                     }else{
                         inputStream = urlConnection.getInputStream();
-                        response = requestRead(inputStream);
+                        response = requestReadUnzip(inputStream);
                     }
                 }catch (IOException e){
                     e.printStackTrace();
@@ -118,9 +122,9 @@ public class AsyncSendRequest {
             super.onProgressUpdate(values);
         }
 
-        private String requestRead(InputStream inputStream){
+        private String requestReadUnzip(InputStream inputStream){
             String response = "";
-            BufferedInputStream inputStreamReader = new BufferedInputStream(inputStream);
+            InflaterInputStream inputStreamReader = new InflaterInputStream(inputStream);
             ByteArrayOutputStream result = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
 
@@ -144,22 +148,19 @@ public class AsyncSendRequest {
             return response;
         }
 
-        private void requestWriter(OutputStream outputStream, String req) {
-            BufferedOutputStream outputStreamWriter;
-
-            outputStreamWriter = new BufferedOutputStream(outputStream);
+        private void requestWriterZip(OutputStream outputStream, String req) {
+            DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(outputStream);
             try {
                 byte[] reqToByte = req.getBytes();
-                outputStreamWriter.write(reqToByte, 0, reqToByte.length);
-                outputStreamWriter.flush();
+                deflaterOutputStream.write(reqToByte, 0, reqToByte.length);
+                deflaterOutputStream.flush();
 
-                if (outputStreamWriter != null){
-                    outputStreamWriter.close();
+                if (deflaterOutputStream != null){
+                    deflaterOutputStream.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
         public boolean isNetworkAvaliable(){

@@ -63,7 +63,7 @@ public class AsyncSendRequest {
 
         @Override
         protected String doInBackground(String... strings) {
-            String response = "vide";
+            String response = "Erreur ";
             if(strings.length > 0){
                 URL url;
                 String urlToParse = strings[1];
@@ -78,6 +78,7 @@ public class AsyncSendRequest {
                     urlConnection.setDoOutput(true);
                     urlConnection.setDoInput(true);
                     urlConnection.setRequestMethod("POST");
+                    urlConnection.setRequestProperty("X-Network", "LTE"); //network speed
                     urlConnection.setRequestProperty("Content-Type", "text/plain");
 
                     //write request in body
@@ -88,7 +89,7 @@ public class AsyncSendRequest {
 
                     if(codeErreur != 200){
                         inputStream = urlConnection.getErrorStream();
-                        response = "Erreur " + codeErreur;
+                        response += codeErreur + inputStream.toString();
                     }else{
                         inputStream = urlConnection.getInputStream();
                         response = requestRead(inputStream);
@@ -107,7 +108,6 @@ public class AsyncSendRequest {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            // call handleServerResponse
             listener.handleServerResponse(s);
         }
 
@@ -117,7 +117,7 @@ public class AsyncSendRequest {
         }
 
         private String requestRead(InputStream inputStream){
-            String response = "";
+            String response = "Erreur de lecture ";
             BufferedInputStream inputStreamReader = new BufferedInputStream(inputStream);
             ByteArrayOutputStream result = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];

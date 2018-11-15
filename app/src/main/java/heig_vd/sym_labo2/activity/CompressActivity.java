@@ -21,7 +21,7 @@ public class CompressActivity extends AppCompatActivity implements Communication
     TextView responseTextView;
     EditText requestTextView;
     Button sendRequest;
-    CompressedAsyncSendRequest asyncSendRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +34,19 @@ public class CompressActivity extends AppCompatActivity implements Communication
         requestTextView = (EditText) findViewById(R.id.requestBody);
         responseTextView = (TextView) findViewById(R.id.responseBody);
 
-        asyncSendRequest = new CompressedAsyncSendRequest(this);
-        asyncSendRequest.setCommunicationEventListener(this);
+
 
         //Keyboard management
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(requestTextView, InputMethodManager.SHOW_IMPLICIT);
 
         sendRequest.setOnClickListener(view -> {
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+
             String str = requestTextView.getText().toString();
+            CompressedAsyncSendRequest asyncSendRequest = new CompressedAsyncSendRequest(this);
+            asyncSendRequest.setCommunicationEventListener(this);
+
             if(str != null){
                 try {
                     asyncSendRequest.sendRequest(str, Utils.TXT_URL);

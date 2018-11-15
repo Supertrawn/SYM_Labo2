@@ -1,8 +1,10 @@
 package heig_vd.sym_labo2.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,19 +33,22 @@ public class SerialActivity extends AppCompatActivity {
         setTitle("Serial Activity");
 
         //To test
-        firstName  =  (EditText)   findViewById(R.id.firstName);
-        lastName  =  (EditText)   findViewById(R.id.lastName);
-        id  =  (EditText)   findViewById(R.id.id);
-        responseBody =  (TextView)   findViewById(R.id.responseBody);
-        sendButton   =  (Button)     findViewById(R.id.sendAsync);
+        firstName   =  (EditText)   findViewById(R.id.firstName);
+        lastName     = (EditText)   findViewById(R.id.lastName);
+        id           = (EditText)   findViewById(R.id.id);
+        responseBody = (TextView)   findViewById(R.id.responseBody);
+        sendButton   = (Button)     findViewById(R.id.sendAsync);
 
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(id, InputMethodManager.SHOW_IMPLICIT);
 
+        id.requestFocus();
 
         sendButton.setOnClickListener(view -> {
+            //hidekeyboard
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
             // read request form EditText(s)
             req = serialize(parseInterger(id.getText().toString()),firstName.getText().toString(), lastName.getText().toString());
-            Log.e("REQ: ", req);
-
             AsyncSendRequest request = new AsyncSendRequest(SerialActivity.this);
             request.sendRequest(req, Utils.JSON_URL);
 

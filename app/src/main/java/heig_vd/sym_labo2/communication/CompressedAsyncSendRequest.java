@@ -20,7 +20,9 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 public class CompressedAsyncSendRequest {
@@ -79,7 +81,6 @@ public class CompressedAsyncSendRequest {
                     urlConnection.setDoOutput(true);
                     urlConnection.setDoInput(true);
                     urlConnection.setRequestMethod("POST");
-                    urlConnection.setRequestProperty("Accept-Encoding","deflate");
                     urlConnection.setRequestProperty("X-Network", "CSD");
                     urlConnection.setRequestProperty("X-Content-Encoding", "deflate");
                     urlConnection.setRequestProperty("Content-Type", "text/plain");
@@ -124,7 +125,8 @@ public class CompressedAsyncSendRequest {
 
         private String requestReadUnzip(InputStream inputStream){
             String response = "";
-            InflaterInputStream inputStreamReader = new InflaterInputStream(inputStream);
+            Inflater inflater = new Inflater(true);
+            InflaterInputStream inputStreamReader = new InflaterInputStream(inputStream, inflater);
             ByteArrayOutputStream result = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
 
@@ -149,7 +151,8 @@ public class CompressedAsyncSendRequest {
         }
 
         private void requestWriterZip(OutputStream outputStream, String req) {
-            DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(outputStream);
+            Deflater deflate = new Deflater(Deflater.DEFAULT_COMPRESSION,true);
+            DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(outputStream, deflate);
             try {
                 byte[] reqToByte = req.getBytes();
                 deflaterOutputStream.write(reqToByte, 0, reqToByte.length);

@@ -30,6 +30,6 @@ public class Post {
 
     @Override
     public String toString() {
-        return String.format("%s\n%s", this.title, this.post);
+        return String.format("\n%s\n\n%s\n", this.title, this.post);
     }
 }

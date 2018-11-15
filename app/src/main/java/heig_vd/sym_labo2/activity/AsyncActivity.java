@@ -1,5 +1,6 @@
 package heig_vd.sym_labo2.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,7 @@ public class AsyncActivity extends AppCompatActivity implements CommunicationEve
         imm.showSoftInput(requestTextView, InputMethodManager.SHOW_IMPLICIT);
 
         sendRequest.setOnClickListener(view -> {
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
             String str = requestTextView.getText().toString();
             if(str != null){
                 try {

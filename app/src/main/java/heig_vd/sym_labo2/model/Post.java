@@ -1,5 +1,7 @@
 package heig_vd.sym_labo2.model;
 
+import java.io.Serializable;
+
 public class Post {
 
     private String title;

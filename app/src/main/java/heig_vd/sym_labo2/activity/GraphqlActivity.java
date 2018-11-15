@@ -70,7 +70,7 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
     private void callForAuthors() throws Exception{
         //first request.
         requestAuthor = new AsyncSendRequest(GraphqlActivity.this);
-        requestAuthor.sendGraphQLRequest(graphQLAuthorsRequest, Utils.GRAPHQL_URL);
+        requestAuthor.sendRequest(graphQLAuthorsRequest, Utils.GRAPHQL_URL);
         requestAuthor.setCommunicationEventListener(response -> {
             if(response != null){
                 try{
@@ -95,12 +95,13 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
                                                 .getJSONObject("data")
                                                 .getJSONArray("allAuthors");
             JSONObject author;
-            String name;
+            String firstName, lastName;
             int size = authorsArray.length();
             for(int i = 0; i < size; i++ ) {
                 author = authorsArray.getJSONObject(i);
-                name = author.getString("first_name") + " " + author.getString("last_name");
-                authorsNameList.add(new Authors(author.getInt("id"), name));
+                firstName = author.getString("first_name");
+                lastName = author.getString("last_name");
+                authorsNameList.add(new Authors(author.getInt("id"), firstName, lastName));
             }
 
         } catch (JSONException e) {
@@ -127,7 +128,6 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
                                             .getJSONObject("author")
                                             .getJSONArray("posts");
             JSONObject post;
-            Log.e("POST 1:", postsArray.getJSONObject(0).getString("title"));
             int size = postsArray.length();
             for(int i = 0; i < size; i++ ) {
                 post = postsArray.getJSONObject(i);
@@ -149,11 +149,10 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
 
         Toast.makeText(this, authorId + " "+ adapterView.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
 
-        requestPosts.sendGraphQLRequest(req, Utils.GRAPHQL_URL);
+        requestPosts.sendRequest(req, Utils.GRAPHQL_URL);
         requestPosts.setCommunicationEventListener(response -> {
             if(response != null){
                 try{
-                    Log.e("POST", response);
                     populateCustomList(response);
                 }catch (Exception e){
                     e.printStackTrace();

@@ -42,24 +42,6 @@ public class AsyncSendRequest {
         }
     }
 
-    public void sendJsonRequest(String request, String url){
-        // Check for internet connexion status
-        if(!isConnectedToNetwork()){
-            Toast.makeText(context, "No Internet Connection, please check network", Toast.LENGTH_SHORT).show();
-        }else{
-            new requestOperation().execute(request,url);
-        }
-    }
-
-    public void sendGraphQLRequest(String request, String url){
-        // Check for internet connexion status
-        if(!isConnectedToNetwork()){
-            Toast.makeText(context, "No Internet Connection, please check network", Toast.LENGTH_SHORT).show();
-        }else{
-            new requestOperation().execute(request,url);
-        }
-    }
-
     public void setCommunicationEventListener(CommunicationEventListener commEventListener){
         this.listener = commEventListener;
     }
@@ -100,7 +82,7 @@ public class AsyncSendRequest {
 
                     //write request in body
                     requestWriter(urlConnection.getOutputStream(), request);
-                    urlConnection.connect();
+                    //urlConnection.connect();
 
                     int codeErreur = urlConnection.getResponseCode();
 

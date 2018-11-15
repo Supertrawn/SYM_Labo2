@@ -39,24 +39,16 @@ public class AsyncActivity extends AppCompatActivity implements CommunicationEve
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(requestTextView, InputMethodManager.SHOW_IMPLICIT);
 
-        sendRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // "{\"x\": \"val1\",\"y\":\"val2\"}";
-                String str = requestTextView.getText().toString();
-                if(str != null){
-                    try {
-                        //TODO
-
-                        asyncSendRequest.sendRequest(str, Utils.TXT_URL);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    Toast.makeText(AsyncActivity.this, "Please Fill the request Body", Toast.LENGTH_SHORT).show();
+        sendRequest.setOnClickListener(view -> {
+            String str = requestTextView.getText().toString();
+            if(str != null){
+                try {
+                    asyncSendRequest.sendRequest(str, Utils.TXT_URL);
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-
+            }else{
+                Toast.makeText(AsyncActivity.this, "Please Fill the request Body", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -5,4 +5,8 @@
     <string name="sendRequestButton">Send Request</string>
     <string name="authorsChoice">1. Choix de l\'auteur :</string>
     <string name="authorsPosts">2. Postes de l\'auteur :</string>
+    <string name="sendingAuthor">Auteur à envoyer</string>
+    <string name="nomHint">nom</string>
+    <string name="prenomHint">prénom</string>
+    <string name="idHint">id</string>
 </resources>

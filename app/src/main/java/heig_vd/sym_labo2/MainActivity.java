@@ -9,6 +9,7 @@ import android.widget.Button;
 import heig_vd.sym_labo2.activity.AsyncActivity;
 import heig_vd.sym_labo2.activity.CompressActivity;
 import heig_vd.sym_labo2.activity.GraphqlActivity;
+import heig_vd.sym_labo2.activity.SerialActivity;
 
 public class MainActivity extends AppCompatActivity {
 

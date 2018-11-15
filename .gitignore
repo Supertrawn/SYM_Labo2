@@ -1,0 +1,10 @@
+
+\.gradle/
+
+\.idea/
+
+SYM_Labo_02\.iml
+
+app/app\.iml
+
+local\.properties

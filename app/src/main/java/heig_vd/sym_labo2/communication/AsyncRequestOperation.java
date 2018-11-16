@@ -9,6 +9,16 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * @Class       : AsyncRequestOperation
+ * @Author(s)   : Michael Brouchoud, Thomas Lechaire & Kevin Pradervand
+ * @Date        : 16.11.2018
+ *
+ * @Goal        : Standard send/receive request/respond
+ *
+ * @Comment(s)  : -
+ * @See         : ARequestOperation
+ */
 public class AsyncRequestOperation extends ARequestOperation {
     public AsyncRequestOperation(CommunicationEventListener listener) {
         super(listener);

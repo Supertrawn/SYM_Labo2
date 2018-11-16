@@ -8,6 +8,16 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * @Class       : ARequestOperation
+ * @Author(s)   : Michael Brouchoud, Thomas Lechaire & Kevin Pradervand
+ * @Date        : 16.11.2018
+ *
+ * @Goal        : Common send/receive request/respond
+ *
+ * @Comment(s)  : -
+ * @See         : AsyncTask
+ */
 public abstract class ARequestOperation extends AsyncTask<String, Void, String> {
     private CommunicationEventListener listener;
 
@@ -66,9 +76,25 @@ public abstract class ARequestOperation extends AsyncTask<String, Void, String> 
         super.onProgressUpdate(values);
     }
 
+    /**
+     * @brief Read the respond from the InputStream
+     * @param inputStream The request to read
+     * @return The respond of the request
+     */
     protected abstract String requestRead(InputStream inputStream);
 
+    /**
+     * @brief Send request
+     * @param outputStream OutputStream to use
+     * @param req The request to send
+     */
     protected abstract void requestWriter(OutputStream outputStream, String req);
 
+    /**
+     * @brief Prepare the prepare HttpURLConnection
+     * @param url The url to prepare
+     * @return The prepareHttpURLConnection
+     * @throws IOException
+     */
     protected abstract HttpURLConnection prepareHttpURLConnection(URL url) throws IOException;
 }

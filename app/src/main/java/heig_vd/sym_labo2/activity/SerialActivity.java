@@ -16,6 +16,16 @@ import heig_vd.sym_labo2.communication.AsyncSendRequest;
 import heig_vd.sym_labo2.model.Authors;
 import heig_vd.sym_labo2.utils.Utils;
 
+/**
+ * @Class       : SerialActivity
+ * @Author(s)   : Michael Brouchoud, Thomas Lechaire & Kevin Pradervand
+ * @Date        : 16.11.2018
+ *
+ * @Goal        : Async Serial Request Activity Test
+ *
+ * @Comment(s)  : -
+ * @See         : AppCompatActivity
+ */
 public class SerialActivity extends AppCompatActivity {
 
     private String req;
@@ -36,7 +46,8 @@ public class SerialActivity extends AppCompatActivity {
         id                  = findViewById(R.id.id);
         responseBody        = findViewById(R.id.responseBody);
 
-        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        final InputMethodManager imm =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         if(imm != null) {
             imm.showSoftInput(id, InputMethodManager.SHOW_IMPLICIT);
@@ -46,27 +57,34 @@ public class SerialActivity extends AppCompatActivity {
             sendButton.setOnClickListener(view -> {
 
                 //hidekeyboard
-                // Must get the InputMethodManager again because it is a bad practice to modify external variable inside a lambda
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // Must get the InputMethodManager again because it is a bad practice
+                // to modify external variable inside a lambda
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
                 if(inputMethodManager != null) {
                     inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                     // read request form EditText(s)
-                    req = serialize(parseInteger(id.getText().toString()), firstName.getText().toString(), lastName.getText().toString());
-                    AsyncSendRequest asyncSendRequest = new AsyncSendRequest(SerialActivity.this, new AsyncRequestOperation(response -> {
+                    req = serialize(parseInteger(
+                            id.getText().toString()),
+                            firstName.getText().toString(),
+                            lastName.getText().toString());
+
+                    AsyncSendRequest asyncSendRequest = new AsyncSendRequest(
+                            SerialActivity.this,
+                                    new AsyncRequestOperation(response -> {
                         Authors authorResponse = serializer.fromJson(response, Authors.class);
                         responseBody.setText(authorResponse.display());
-                        return false;
                     }));
                     asyncSendRequest.sendRequest(req, Utils.JSON_URL);
                 }
                 else {
-                    Utils.displayContactSupportErrorMessage(SerialActivity.this);
+                    Utils.displayContactSupportErrorMessageToast(SerialActivity.this);
                 }
             });
         } else {
-            Utils.displayContactSupportErrorMessage(SerialActivity.this);
+            Utils.displayContactSupportErrorMessageToast(SerialActivity.this);
         }
     }
 

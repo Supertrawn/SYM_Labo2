@@ -24,7 +24,19 @@ import heig_vd.sym_labo2.R;
 import heig_vd.sym_labo2.model.Post;
 import heig_vd.sym_labo2.utils.Utils;
 
-public class GraphqlActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+/**
+ * @Class       : CompressActivity
+ * @Author(s)   : Michael Brouchoud, Thomas Lechaire & Kevin Pradervand
+ * @Date        : 16.11.2018
+ *
+ * @Goal        : Async GraphQL Request Activity Test
+ *
+ * @Comment(s)  : -
+ * @See         : AppCompatActivity
+ */
+public class GraphqlActivity
+        extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener {
 
     private Spinner authorSpinner;
     private ListView postsList;
@@ -32,8 +44,11 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
     private List<Authors> authorsNameList;
     private List<Post> postFromAuthorList;
 
-    private static final String graphQLAuthorsRequest = "{\"query\": \"{allAuthors{id first_name last_name}}\"}";
-    private static final String graphQLOneAuthorRequest = "{\"query\": \"{author(id: %d){posts{title content}}}\"}";
+    private static final String graphQLAuthorsRequest =
+            "{\"query\": \"{allAuthors{id first_name last_name}}\"}";
+
+    private static final String graphQLOneAuthorRequest =
+            "{\"query\": \"{author(id: %d){posts{title content}}}\"}";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,26 +73,34 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
         }
     }
 
+    /**
+     * @brief Request to get all authors
+     */
     private void callForAuthors() {
         //first request.
-        AsyncSendRequest asyncSendRequest = new AsyncSendRequest(GraphqlActivity.this, new AsyncRequestOperation(response -> {
+        AsyncSendRequest asyncSendRequest = new AsyncSendRequest(GraphqlActivity.this,
+                new AsyncRequestOperation(response -> {
+
             if(response != null){
                 try{
                     getAuthorsName(response);
-                    authorSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, authorsNameList));
+                    authorSpinner.setAdapter(
+                            new ArrayAdapter<>(
+                                    this,
+                                    android.R.layout.simple_list_item_1,
+                                    authorsNameList)
+                    );
                 }catch (Exception e){
                     e.printStackTrace();
-                    return false;
                 }
             }
-            return true;
         }));
         asyncSendRequest.sendRequest(graphQLAuthorsRequest, Utils.GRAPHQL_URL);
     }
 
     /***
-     *
-     * @param response
+     * @brief Parse all authors post
+     * @param response The response to parse
      */
     private void getAuthorsPosts(String response) {
         postFromAuthorList = new ArrayList<>();
@@ -87,11 +110,15 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
                     .getJSONObject("data")
                     .getJSONObject("author")
                     .getJSONArray("posts");
+
             JSONObject post;
             int size = postsArray.length();
             for(int i = 0; i < size; i++ ) {
                 post = postsArray.getJSONObject(i);
-                postFromAuthorList.add(new Post(post.getString("title"), post.getString("content")));
+                postFromAuthorList.add(new Post(
+                        post.getString("title"),
+                        post.getString("content"))
+                );
             }
         }catch(JSONException e){
             e.printStackTrace();
@@ -99,8 +126,8 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
     }
 
     /***
-     *
-     * @param response
+     * @brief Parse all authors name
+     * @param response The response to parse
      */
     private void getAuthorsName(String response) {
         authorsNameList= new ArrayList<>();
@@ -124,21 +151,22 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
     }
 
     /***
-     * @brief populate the listView to display all posts of an author
+     * @brief Populate the listView to display all posts of an author
      * @param response
      */
     private void populateCustomList(String response) {
         getAuthorsPosts(response);
-        ArrayAdapter<Post> postsArrayAdapter = new ArrayAdapter<>(GraphqlActivity.this, android.R.layout.simple_list_item_1, postFromAuthorList);
+
+        ArrayAdapter<Post> postsArrayAdapter = new ArrayAdapter<>(
+                GraphqlActivity.this,
+                android.R.layout.simple_list_item_1,
+                postFromAuthorList);
+
         postsList.setAdapter(postsArrayAdapter);
     }
 
     /***
-     * @brief function called when an item is selected from the spinner
-     * @param adapterView
-     * @param view
-     * @param pos
-     * @param l
+     * @brief Function called when an item is selected from the spinner
      */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -152,17 +180,14 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
                     populateCustomList(response);
                 }catch (Exception e) {
                     e.printStackTrace();
-                    return false;
                 }
             }
-            return true;
         }));
         asyncSendRequest.sendRequest(req, Utils.GRAPHQL_URL);
     }
 
     /****
      * @brief method called when nothing is selected in the spinner
-     * @param adapterView
      */
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {

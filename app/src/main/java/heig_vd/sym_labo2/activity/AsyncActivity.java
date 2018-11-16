@@ -7,13 +7,22 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import heig_vd.sym_labo2.R;
 import heig_vd.sym_labo2.communication.AsyncRequestOperation;
 import heig_vd.sym_labo2.communication.AsyncSendRequest;
 import heig_vd.sym_labo2.utils.Utils;
 
+/**
+ * @Class       : AsyncActivity
+ * @Author(s)   : Michael Brouchoud, Thomas Lechaire & Kevin Pradervand
+ * @Date        : 16.11.2018
+ *
+ * @Goal        : Async Request Activity Test
+ *
+ * @Comment(s)  : -
+ * @See         : AppCompatActivity
+ */
 public class AsyncActivity extends AppCompatActivity {
 
     private TextView responseTextView;
@@ -36,18 +45,20 @@ public class AsyncActivity extends AppCompatActivity {
 
             /* response */
             responseTextView.setText(response);
-            return false;
         }));
 
-        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        final InputMethodManager imm =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         if(imm != null) {
             imm.showSoftInput(requestTextView, InputMethodManager.SHOW_IMPLICIT);
 
             sendRequest.setOnClickListener(view -> {
+                // Must get the InputMethodManager again because it is a bad practice
+                // to modify external variable inside a lambda
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                // Must get the InputMethodManager again because it is a bad practice to modify external variable inside a lambda
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if(inputMethodManager != null) {
                     inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     String str = requestTextView.getText().toString();
@@ -58,15 +69,15 @@ public class AsyncActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     } else {
-                        Toast.makeText(AsyncActivity.this, "Please Fill the request Body", Toast.LENGTH_SHORT).show();
+                        Utils.displayPleaseFillTheRequestBodyToal(AsyncActivity.this);
                     }
                 }
                 else {
-                    Utils.displayContactSupportErrorMessage(AsyncActivity.this);
+                    Utils.displayContactSupportErrorMessageToast(AsyncActivity.this);
                 }
             });
         } else {
-            Utils.displayContactSupportErrorMessage(AsyncActivity.this);
+            Utils.displayContactSupportErrorMessageToast(AsyncActivity.this);
         }
     }
 }

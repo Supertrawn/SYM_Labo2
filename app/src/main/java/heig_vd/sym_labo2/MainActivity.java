@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     Button btnSerial;
     Button btnCompressed;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

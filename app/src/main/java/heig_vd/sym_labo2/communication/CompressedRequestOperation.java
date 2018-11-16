@@ -11,6 +11,16 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
+/**
+ * @Class       : AsyncRequestOperation
+ * @Author(s)   : Michael Brouchoud, Thomas Lechaire & Kevin Pradervand
+ * @Date        : 16.11.2018
+ *
+ * @Goal        : Compressed data when send/receive request/respond
+ *
+ * @Comment(s)  : -
+ * @See         : ARequestOperation
+ */
 public class CompressedRequestOperation extends ARequestOperation {
     public CompressedRequestOperation(CommunicationEventListener listener) {
         super(listener);

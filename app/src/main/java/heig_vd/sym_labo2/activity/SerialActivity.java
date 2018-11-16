@@ -3,7 +3,6 @@ package heig_vd.sym_labo2.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,20 +10,18 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import java.text.ParseException;
-
 import heig_vd.sym_labo2.R;
+import heig_vd.sym_labo2.communication.AsyncRequestOperation;
 import heig_vd.sym_labo2.communication.AsyncSendRequest;
 import heig_vd.sym_labo2.model.Authors;
 import heig_vd.sym_labo2.utils.Utils;
 
 public class SerialActivity extends AppCompatActivity {
 
-    String req;
-    EditText id, firstName, lastName;
-    TextView responseBody;
-    Button sendButton;
-    Gson serializer;
+    private String req;
+    private EditText id, firstName, lastName;
+    private TextView responseBody;
+    private Gson serializer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,35 +29,48 @@ public class SerialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_serial);
         setTitle("Serial Activity");
 
-        //To test
-        firstName   =  (EditText)   findViewById(R.id.firstName);
-        lastName     = (EditText)   findViewById(R.id.lastName);
-        id           = (EditText)   findViewById(R.id.id);
-        responseBody = (TextView)   findViewById(R.id.responseBody);
-        sendButton   = (Button)     findViewById(R.id.sendAsync);
+        /* Initialisation */
+        Button sendButton   = findViewById(R.id.sendAsync);
+        firstName           = findViewById(R.id.firstName);
+        lastName            = findViewById(R.id.lastName);
+        id                  = findViewById(R.id.id);
+        responseBody        = findViewById(R.id.responseBody);
 
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(id, InputMethodManager.SHOW_IMPLICIT);
 
-        id.requestFocus();
+        if(imm != null) {
+            imm.showSoftInput(id, InputMethodManager.SHOW_IMPLICIT);
 
-        sendButton.setOnClickListener(view -> {
-            //hidekeyboard
-            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
-            // read request form EditText(s)
-            req = serialize(parseInterger(id.getText().toString()),firstName.getText().toString(), lastName.getText().toString());
-            AsyncSendRequest request = new AsyncSendRequest(SerialActivity.this);
-            request.sendRequest(req, Utils.JSON_URL);
+            id.requestFocus();
 
-            request.setCommunicationEventListener(response -> {
-                Authors authorResponse = serializer.fromJson(response, Authors.class);
-                responseBody.setText(authorResponse.display());
-                return false;
+            sendButton.setOnClickListener(view -> {
+
+                //hidekeyboard
+                // Must get the InputMethodManager again because it is a bad practice to modify external variable inside a lambda
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                if(inputMethodManager != null) {
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                    // read request form EditText(s)
+                    req = serialize(parseInteger(id.getText().toString()), firstName.getText().toString(), lastName.getText().toString());
+                    AsyncSendRequest asyncSendRequest = new AsyncSendRequest(SerialActivity.this, new AsyncRequestOperation(response -> {
+                        Authors authorResponse = serializer.fromJson(response, Authors.class);
+                        responseBody.setText(authorResponse.display());
+                        return false;
+                    }));
+                    asyncSendRequest.sendRequest(req, Utils.JSON_URL);
+                }
+                else {
+                    Utils.displayContactSupportErrorMessage(SerialActivity.this);
+                }
             });
-        });
+        } else {
+            Utils.displayContactSupportErrorMessage(SerialActivity.this);
+        }
     }
 
-    public int parseInterger(String futureInt){
+    public int parseInteger(String futureInt){
         return Integer.parseInt(futureInt);
     }
 

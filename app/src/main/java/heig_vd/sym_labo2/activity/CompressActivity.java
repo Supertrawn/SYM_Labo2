@@ -3,7 +3,6 @@ package heig_vd.sym_labo2.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,17 +11,12 @@ import android.widget.Toast;
 
 import heig_vd.sym_labo2.R;
 import heig_vd.sym_labo2.communication.AsyncSendRequest;
-import heig_vd.sym_labo2.communication.CommunicationEventListener;
-import heig_vd.sym_labo2.communication.CompressedAsyncSendRequest;
+import heig_vd.sym_labo2.communication.CompressedRequestOperation;
 import heig_vd.sym_labo2.utils.Utils;
 
-public class CompressActivity extends AppCompatActivity implements CommunicationEventListener {
-
-    TextView responseTextView;
-    EditText requestTextView;
-    Button sendRequest;
-
-
+public class CompressActivity extends AppCompatActivity {
+    private TextView responseTextView;
+    private EditText requestTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,40 +24,47 @@ public class CompressActivity extends AppCompatActivity implements Communication
         setTitle("Compressed Activity");
 
         /* Initialisation */
-        sendRequest = (Button) findViewById(R.id.sendAsync);
-        requestTextView = (EditText) findViewById(R.id.requestBody);
-        responseTextView = (TextView) findViewById(R.id.responseBody);
-
-
+        Button sendRequest  = findViewById(R.id.sendAsync);
+        requestTextView     = findViewById(R.id.requestBody);
+        responseTextView    = findViewById(R.id.responseBody);
 
         //Keyboard management
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(requestTextView, InputMethodManager.SHOW_IMPLICIT);
 
-        sendRequest.setOnClickListener(view -> {
-            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+        if(imm != null) {
+            imm.showSoftInput(requestTextView, InputMethodManager.SHOW_IMPLICIT);
 
-            String str = requestTextView.getText().toString();
-            CompressedAsyncSendRequest asyncSendRequest = new CompressedAsyncSendRequest(this);
-            asyncSendRequest.setCommunicationEventListener(this);
+            sendRequest.setOnClickListener(view -> {
 
-            if(str != null){
-                try {
-                    asyncSendRequest.sendRequest(str, Utils.TXT_URL);
-                }catch (Exception e) {
-                    e.printStackTrace();
+                // Must get the InputMethodManager again because it is a bad practice to modify external variable inside a lambda
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                if(inputMethodManager != null) {
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                    String str = requestTextView.getText().toString();
+                    AsyncSendRequest asyncSendRequest = new AsyncSendRequest(this, new CompressedRequestOperation(response -> {
+                        /* response */
+                        responseTextView.setText(response);
+
+                        return false;
+                    }));
+
+                    if (str.compareTo("") != 0) {
+                        try {
+                            asyncSendRequest.sendRequest(str, Utils.TXT_URL);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(CompressActivity.this, "Please Fill the request Body", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Utils.displayContactSupportErrorMessage(CompressActivity.this);
                 }
-            }else{
-                Toast.makeText(CompressActivity.this, "Please Fill the request Body", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    public boolean handleServerResponse(String response) {
-        /* response */
-        responseTextView.setText(response);
-
-        return false;
+            });
+        } else {
+            Utils.displayContactSupportErrorMessage(CompressActivity.this);
+        }
     }
 }

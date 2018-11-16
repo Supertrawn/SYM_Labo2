@@ -3,14 +3,12 @@ package heig_vd.sym_labo2.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,23 +17,23 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import heig_vd.sym_labo2.communication.AsyncRequestOperation;
+import heig_vd.sym_labo2.communication.AsyncSendRequest;
 import heig_vd.sym_labo2.model.Authors;
 import heig_vd.sym_labo2.R;
-import heig_vd.sym_labo2.communication.AsyncSendRequest;
 import heig_vd.sym_labo2.model.Post;
 import heig_vd.sym_labo2.utils.Utils;
 
 public class GraphqlActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner authorSpinner;
-    private TextView authorsChoice;
-    private TextView authorsPosts;
     private ListView postsList;
 
     private List<Authors> authorsNameList;
     private List<Post> postFromAuthorList;
-    //Maybe we can use only one request
-    private final String graphQLAuthorsRequest = "{\"query\": \"{allAuthors{id first_name last_name}}\"}";
+
+    private static final String graphQLAuthorsRequest = "{\"query\": \"{allAuthors{id first_name last_name}}\"}";
+    private static final String graphQLOneAuthorRequest = "{\"query\": \"{author(id: %d){posts{title content}}}\"}";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,16 +41,15 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
         setContentView(R.layout.activity_graph);
         setTitle("GraphQL Activity");
 
-        authorsChoice = (TextView) findViewById(R.id.authorsChoice);
+        /* Initialisation */
+        TextView authorsChoice  = findViewById(R.id.authorsChoice);
+        TextView authorsPosts   = findViewById(R.id.authorPosts);
+        authorSpinner           = findViewById(R.id.authorsSpinner);
+        postsList               = findViewById(R.id.postList);
+
         authorsChoice.setText(R.string.authorsChoice);
-
-        authorsPosts = (TextView) findViewById(R.id.authorPosts);
         authorsPosts.setText(R.string.authorsPosts);
-
-        authorSpinner = (Spinner) findViewById(R.id.authorsSpinner);
         authorSpinner.setOnItemSelectedListener(this);
-
-        postsList = (ListView) findViewById(R.id.postList);
 
         try {
             callForAuthors();
@@ -61,11 +58,9 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
         }
     }
 
-    private void callForAuthors() throws Exception{
+    private void callForAuthors() {
         //first request.
-         AsyncSendRequest requestAuthor = new AsyncSendRequest(GraphqlActivity.this);
-        requestAuthor.sendRequest(graphQLAuthorsRequest, Utils.GRAPHQL_URL);
-        requestAuthor.setCommunicationEventListener(response -> {
+        AsyncSendRequest asyncSendRequest = new AsyncSendRequest(GraphqlActivity.this, new AsyncRequestOperation(response -> {
             if(response != null){
                 try{
                     getAuthorsName(response);
@@ -76,14 +71,15 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
                 }
             }
             return true;
-        });
+        }));
+        asyncSendRequest.sendRequest(graphQLAuthorsRequest, Utils.GRAPHQL_URL);
     }
 
     /***
      *
      * @param response
      */
-    private void getAuthorsPosts(String response){
+    private void getAuthorsPosts(String response) {
         postFromAuthorList = new ArrayList<>();
 
         try{
@@ -147,24 +143,22 @@ public class GraphqlActivity extends AppCompatActivity implements AdapterView.On
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
         int authorId = ((Authors) adapterView.getItemAtPosition(pos)).getId();
-        String req = String.format("{\"query\": \"{author(id: %d){posts{title content}}}\"}", authorId);
+        String req = String.format(graphQLOneAuthorRequest, authorId);
 
-        AsyncSendRequest requestPosts = new AsyncSendRequest(GraphqlActivity.this);
-        requestPosts.sendRequest(req, Utils.GRAPHQL_URL);
-
-        requestPosts.setCommunicationEventListener(response -> {
+        AsyncSendRequest asyncSendRequest = new AsyncSendRequest(GraphqlActivity.this,
+                new AsyncRequestOperation(response -> {
             if(response != null){
                 try{
                     populateCustomList(response);
-                }catch (Exception e){
+                }catch (Exception e) {
                     e.printStackTrace();
                     return false;
                 }
             }
             return true;
-        });
+        }));
+        asyncSendRequest.sendRequest(req, Utils.GRAPHQL_URL);
     }
-
 
     /****
      * @brief method called when nothing is selected in the spinner

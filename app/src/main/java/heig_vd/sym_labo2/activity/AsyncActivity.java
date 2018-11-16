@@ -45,6 +45,7 @@ public class AsyncActivity extends AppCompatActivity {
 
             /* response */
             responseTextView.setText(response);
+            return true;
         }));
 
         final InputMethodManager imm =

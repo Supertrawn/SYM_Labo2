@@ -92,8 +92,10 @@ public class GraphqlActivity
                     );
                 }catch (Exception e){
                     e.printStackTrace();
+                    return false;
                 }
             }
+            return true;
         }));
         asyncSendRequest.sendRequest(graphQLAuthorsRequest, Utils.GRAPHQL_URL);
     }
@@ -180,8 +182,10 @@ public class GraphqlActivity
                     populateCustomList(response);
                 }catch (Exception e) {
                     e.printStackTrace();
+                    return false;
                 }
             }
+            return true;
         }));
         asyncSendRequest.sendRequest(req, Utils.GRAPHQL_URL);
     }

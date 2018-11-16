@@ -29,7 +29,7 @@ public class AsyncSendRequest {
      * @param request The request to send
      * @param url The url to send the request
      */
-    public void sendRequest(String request, String url){
+    public void sendRequest(String request, String url) throws Exception {
         // Check for internet connexion status
         if(!isConnectedToNetwork()){
             Toast.makeText(

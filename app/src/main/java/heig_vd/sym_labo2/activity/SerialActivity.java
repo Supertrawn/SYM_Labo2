@@ -76,6 +76,7 @@ public class SerialActivity extends AppCompatActivity {
                                     new AsyncRequestOperation(response -> {
                         Authors authorResponse = serializer.fromJson(response, Authors.class);
                         responseBody.setText(authorResponse.display());
+                        return true;
                     }));
                     asyncSendRequest.sendRequest(req, Utils.JSON_URL);
                 }

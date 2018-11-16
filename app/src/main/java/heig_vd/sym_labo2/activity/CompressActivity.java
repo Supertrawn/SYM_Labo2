@@ -61,6 +61,7 @@ public class CompressActivity extends AppCompatActivity {
                             new CompressedRequestOperation(response -> {
                         /* response */
                         responseTextView.setText(response);
+                        return true;
                     }));
 
                     if (str.compareTo("") != 0) {

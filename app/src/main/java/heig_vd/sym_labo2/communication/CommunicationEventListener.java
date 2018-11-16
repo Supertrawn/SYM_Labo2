@@ -13,6 +13,7 @@ public interface CommunicationEventListener {
     /**
      * @brief Process the response to display it to the user interface
      * @param response The response to process
+     * @return true -> update ui ok, false -> update ui failed
      */
-    void handleServerResponse(String response);
+    boolean handleServerResponse(String response);
 }

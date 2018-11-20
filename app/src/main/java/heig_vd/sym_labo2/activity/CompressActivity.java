@@ -7,7 +7,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import heig_vd.sym_labo2.R;
 import heig_vd.sym_labo2.communication.AsyncSendRequest;
@@ -57,7 +56,9 @@ public class CompressActivity extends AppCompatActivity {
                     inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                     String str = requestTextView.getText().toString();
-                    AsyncSendRequest asyncSendRequest = new AsyncSendRequest(this,
+
+                    AsyncSendRequest asyncSendRequest = new AsyncSendRequest(
+                            CompressActivity.this,
                             new CompressedRequestOperation(response -> {
                         /* response */
                         responseTextView.setText(response);

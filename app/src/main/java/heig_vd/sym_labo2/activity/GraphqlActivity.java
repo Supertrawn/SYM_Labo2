@@ -97,7 +97,12 @@ public class GraphqlActivity
             }
             return true;
         }));
-        asyncSendRequest.sendRequest(graphQLAuthorsRequest, Utils.GRAPHQL_URL);
+
+        try {
+            asyncSendRequest.sendRequest(graphQLAuthorsRequest, Utils.GRAPHQL_URL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /***
@@ -187,7 +192,11 @@ public class GraphqlActivity
             }
             return true;
         }));
-        asyncSendRequest.sendRequest(req, Utils.GRAPHQL_URL);
+        try {
+            asyncSendRequest.sendRequest(req, Utils.GRAPHQL_URL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /****

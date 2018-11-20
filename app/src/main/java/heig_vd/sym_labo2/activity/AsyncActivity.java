@@ -27,7 +27,6 @@ public class AsyncActivity extends AppCompatActivity {
 
     private TextView responseTextView;
     private EditText requestTextView;
-    private AsyncSendRequest asyncSendRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +38,6 @@ public class AsyncActivity extends AppCompatActivity {
         Button sendRequest  = findViewById(R.id.sendAsync);
         requestTextView     = findViewById(R.id.requestBody);
         responseTextView    = findViewById(R.id.responseBody);
-
-        asyncSendRequest = new AsyncSendRequest(this,
-                new AsyncRequestOperation(response -> {
-
-            /* response */
-            responseTextView.setText(response);
-            return true;
-        }));
 
         final InputMethodManager imm =
                 (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -64,6 +55,16 @@ public class AsyncActivity extends AppCompatActivity {
                     inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     String str = requestTextView.getText().toString();
                     if (str.compareTo("") != 0) {
+
+                        AsyncSendRequest asyncSendRequest = new AsyncSendRequest(
+                                AsyncActivity.this,
+                                new AsyncRequestOperation(response -> {
+
+                                    /* response */
+                                    responseTextView.setText(response);
+                                    return true;
+                                }));
+
                         try {
                             asyncSendRequest.sendRequest(str, Utils.TXT_URL);
                         } catch (Exception e) {

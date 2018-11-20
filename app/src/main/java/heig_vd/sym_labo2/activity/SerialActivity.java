@@ -78,7 +78,12 @@ public class SerialActivity extends AppCompatActivity {
                         responseBody.setText(authorResponse.display());
                         return true;
                     }));
-                    asyncSendRequest.sendRequest(req, Utils.JSON_URL);
+
+                    try {
+                        asyncSendRequest.sendRequest(req, Utils.JSON_URL);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     Utils.displayContactSupportErrorMessageToast(SerialActivity.this);

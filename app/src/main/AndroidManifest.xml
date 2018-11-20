@@ -22,7 +22,7 @@
         <activity android:windowSoftInputMode="adjustPan" android:name=".activity.AsyncActivity" />
         <activity android:windowSoftInputMode="adjustPan" android:name=".activity.CompressActivity" />
         <activity android:windowSoftInputMode="adjustPan" android:name=".activity.GraphqlActivity" />
-        <activity android:windowSoftInputMode="adjustPan" android:name="DiffActivity" />
+        <activity android:windowSoftInputMode="adjustPan" android:name=".activity.DiffActivity" />
         <activity android:windowSoftInputMode="adjustPan" android:name=".activity.SerialActivity" >
         </activity>
     </application>

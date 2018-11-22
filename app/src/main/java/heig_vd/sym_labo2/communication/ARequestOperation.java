@@ -44,6 +44,7 @@ public abstract class ARequestOperation extends AsyncTask<String, Void, String> 
 
                 //write request in body
                 requestWriter(urlConnection.getOutputStream(), request);
+                Log.d("SEND SIZE:",urlConnection.getHeaderField("Content-length"));
                 urlConnection.connect();
 
                 int errorCode = urlConnection.getResponseCode();
@@ -53,7 +54,7 @@ public abstract class ARequestOperation extends AsyncTask<String, Void, String> 
                     response += errorCode + inputStream.toString();
                 }else{
                     inputStream = urlConnection.getInputStream();
-                    Log.d("SIZE:",urlConnection.getHeaderField("Content-length"));
+                    Log.d("RECEIVE SIZE:",urlConnection.getHeaderField("Content-length"));
                     response = requestRead(inputStream);
                 }
             }catch (IOException e){

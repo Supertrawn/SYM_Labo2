@@ -94,7 +94,6 @@ Le fait de ne pas avoir de structure à l'avantage d'avoir un poids moins elevé
 *architecture basée sur HTTP ? Veuillez discuter des éventuelles avantages ou limitations par*
 *rapport à un protocole basé sur JSON ou XML ?*
 
-```
 Protocol Buffers 8 est compatible avec une architecture basée sur HTTP. C'est une manière plus légère de sérialiser et d'avoir une vérification de la structure des données.
 
 Pour la transmission des requêtes sur le réseau, il faut utiliser l'entête "application/octet-stream", il faut faire attention au fait que et le client et le server doivent pouvoir traiter et gérer la requête/réponse correctement.
@@ -103,28 +102,22 @@ Par rapport à XML Protobuff est plus léger, plus rapide, moins ambigu. Protoco
 
 Par rapport à Json il propose la validation en plus.
 
-```
-
 *c. Par rapport à l’API GraphQL mise à disposition pour ce laboratoire. Avez-vous constaté des*
 *points qui pourraient être améliorés pour une utilisation mobile ? Veuillez en discuter, vous*
 *pouvez élargir votre réflexion à une problématique plus large que la manipulation effectuée.*
 
-```
 L'API GraphQL:
 Sans la documentation, il peut être difficile de connaître tous les champs disponibles. Une Api graphQL avec beaucoup de champs devrait proposer un nombre de méthodes plus grandes afin d'éviter à la personne utilisant d'api d'avoir à écrire les 50 champs qu'elle a besoin de récupérer. De plus on pourrait imaginer les problèmes qu'il peut y avoir dans le cas ou le nom d'un des champs viendrai à changer. L'application pourrait ne plus fonctionner. L'utilisation des méthodes peut-être quelque chose à préconiser.
 
-
-```
-
 ### 4.6 Transmission compressée
-*Quel gain peut-on constater en moyenne sur des fichiers texte (xml et json sont aussi du texte) en*
-*utilisant de la compression du point 3.4 ? Vous comparerez vos résultats par rapport au gain théorique*
-*d’une compression DEFLATE, vous enverrez aussi plusieurs tailles de contenu pour comparer.*
-```
-Pas le temps.
+*Quel gain peut-on constater en moyenne sur des fichiers texte (xml et json sont aussi du texte) en utilisant de la compression du point 3.4 ? Vous comparerez vos résultats par rapport au gain théorique d’une compression DEFLATE, vous enverrez aussi plusieurs tailles de contenu pour comparer.*
 
-D/SIZE:: 469
+Envoie de la chaine Hello avec une réponse de taille :
 
+|   		 |  Hello | Hello World Comment ca va ? | abcdefghijklmnop |
+|------------|--------|-----------------------------|------------------|
+|Compressé	 |467     | 483                         | 475              |
+|Non Compressé  |777  |799                          |788               |
+|  Ratio 		|60%  |60%                          |60%               |
 
-
-```
+Donc environ 40% de gains. Vu que l'algortihme de gzip s'appuie sur l'algorithme de deflate. Il a été trouvé que le gain maximal de cette algorithme soit de 80% [Quick Benchmark](https://catchchallenger.first-world.info/wiki/Quick_Benchmark:_Gzip_vs_Bzip2_vs_LZMA_vs_XZ_vs_LZ4_vs_LZO). Il est donc très efficace.

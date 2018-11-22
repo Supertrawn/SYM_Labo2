@@ -1,6 +1,7 @@
 package heig_vd.sym_labo2.communication;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,6 +53,7 @@ public abstract class ARequestOperation extends AsyncTask<String, Void, String> 
                     response += errorCode + inputStream.toString();
                 }else{
                     inputStream = urlConnection.getInputStream();
+                    Log.d("SIZE:",urlConnection.getHeaderField("Content-length"));
                     response = requestRead(inputStream);
                 }
             }catch (IOException e){
